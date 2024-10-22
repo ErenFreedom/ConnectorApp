@@ -1,6 +1,7 @@
 // controllers/connectorLoginController.js
 const axios = require('axios');
 const { validationResult } = require('express-validator');
+const https = require('https');
 
 // Cloud Login Controller for the Connector App
 exports.connectorCloudLogin = async (req, res) => {
@@ -12,8 +13,13 @@ exports.connectorCloudLogin = async (req, res) => {
     const { identifier, password } = req.body; // email or username, and password
 
     try {
+        // Create an axios instance that ignores SSL certificate issues
+        const axiosInstance = axios.create({
+            httpsAgent: new https.Agent({ rejectUnauthorized: false }) // Disable SSL certificate validation
+        });
+
         // Make a request to the Cloud backend's /api/cloudlogin endpoint
-        const cloudResponse = await axios.post('https://ec2-13-126-117-233.ap-south-1.compute.amazonaws.com/api/cloudlogin', {
+        const cloudResponse = await axiosInstance.post('https://ec2-13-126-117-233.ap-south-1.compute.amazonaws.com/api/cloudlogin', {
             identifier,
             password
         }, {

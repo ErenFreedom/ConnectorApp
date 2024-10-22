@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Define the POST route for connector cloud login
 router.post(
-    '/connector-cloud-login',  // Connector frontend will hit this endpoint
+    '/connector-cloud-login',  // Renamed the endpoint for clarity
     [
         check('identifier', 'Identifier (email/username) is required').not().isEmpty(),
         check('password', 'Password is required').not().isEmpty(),
