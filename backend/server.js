@@ -7,10 +7,10 @@ const helmet = require('helmet');
 const path = require('path');
 require('dotenv').config();
 
-// Import routes (make sure to import your connector-related routes here)
-const connectorLoginRoutes = require('./routes/connectorLoginRoutes');  // Adjust the path if needed
+// Import routes
+const connectorLoginRoutes = require('./routes/connectorLoginRoutes'); // Connector login routes
 
-// SSL Certificates (update paths to use certs from 'backend/certs' folder)
+// SSL Certificates
 const sslOptions = {
     key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),   // Private key path
     cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')), // Certificate path
@@ -22,23 +22,21 @@ const app = express();
 // Use security middleware
 app.use(helmet());
 
-// Enable CORS (you can restrict it to your domain if necessary)
+// Enable CORS (optional)
 app.use(cors({
-    origin: ['http://your-frontend-url.com'],  // Frontend URL (update to your domain or IP)
+    origin: ['https://your-frontend-url.com'],  // Allow requests from frontend
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    methods: ['GET', 'POST']
 }));
 
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routes (ensure your routes are correctly set up)
-app.use('/api', connectorLoginRoutes);
+// Use connector login routes
+app.use('/api', connectorLoginRoutes);  // All /api requests handled by connectorLoginRoutes
 
-// HTTPS server setup
+// Start the HTTPS server
 https.createServer(sslOptions, app).listen(3001, () => {
-    console.log('Connector App backend running on https://ec2-3-110-178-15.ap-south-1.compute.amazonaws.com:3001');
+    console.log('Connector App backend running on https://your-connector-backend-domain.com:3001');
 });
-
-
