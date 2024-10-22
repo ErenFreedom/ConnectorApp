@@ -2,6 +2,7 @@ const db = require('../config/db');
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
+const { decryptData } = require('../utils/decryptData'); // Use the decryptData function
 require('dotenv').config();
 
 // Generate a random 12-16 digit activation key
@@ -35,15 +36,15 @@ async function sendActivationKeyEmail(email, activationKey) {
     }
 }
 
-// Connector Cloud Login (Staff or Clients)
-exports.cloudLogin = async (req, res) => {
+// Cloud Login for Staff or Clients
+exports.connectorCloudLogin = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
     const { identifier, password } = req.body; // Identifier can be email or username
-    const decryptedPassword = decryptData(password);  // Decrypt the password
+    const decryptedPassword = decryptData(password);  // Decrypt the password using AES
 
     // Query for both staff and clients
     const query = `
