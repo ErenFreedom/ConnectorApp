@@ -2,7 +2,6 @@ const db = require('../config/db');
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
-const { decryptData } = require('../utils/otpGeneration');
 require('dotenv').config();
 
 // Generate a random 12-16 digit activation key
