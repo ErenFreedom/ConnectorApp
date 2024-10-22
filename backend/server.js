@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
@@ -7,8 +8,8 @@ const helmet = require('helmet');
 const path = require('path');
 require('dotenv').config();
 
-// Import routes
-const connectorLoginRoutes = require('./routes/connectorLoginRoutes'); // Connector login routes
+// Import proxy route
+const proxyCloudRoutes = require('./routes/proxyCloudRoutes'); // Proxy route for Cloud API
 
 // SSL Certificates
 const sslOptions = {
@@ -33,8 +34,8 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Use connector login routes
-app.use('/api', connectorLoginRoutes);  // All /api requests handled by connectorLoginRoutes
+// Use proxy routes
+app.use('/api', proxyCloudRoutes);  // All /api/proxy-cloud-login requests handled by this route
 
 // Start the HTTPS server
 https.createServer(sslOptions, app).listen(3001, () => {
