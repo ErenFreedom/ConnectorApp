@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "name": "linux-clang-x64",
+      "includePath": [
+        "${workspaceFolder}/**", 
+        "/usr/include", 
+        "/usr/include/x86_64-linux-gnu", 
+        "/usr/include/x86_64-linux-gnu/curl", 
+        "/usr/include/boost",  // Include Boost library
+        "${workspaceFolder}/backend/Crow/include"  // Include Crow library
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/clang",
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "linux-clang-x64"
+    }
+  ],
+  "version": 4
+}
