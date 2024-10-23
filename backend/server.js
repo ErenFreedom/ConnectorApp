@@ -8,6 +8,7 @@ require('dotenv').config();
 // Import routes
 const connectorLoginRoutes = require('./routes/connectorLoginRoutes'); // Cloud login route
 const connectorAccessRoutes = require('./routes/connectorAccessRoutes');
+const desigoConnectionRoutes = require('./routes/desigoConnectionRoutes');
 
 // Initialize the Express app
 const app = express();
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api', connectorLoginRoutes);
 app.use('/api', connectorAccessRoutes);
+app.use('/api', desigoConnectionRoutes);
 
 // Start the HTTP server
 http.createServer(app).listen(3001, () => {
