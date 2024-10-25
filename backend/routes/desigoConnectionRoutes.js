@@ -1,6 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { connectToDesigo } = require('../controllers/connectToDesigoController');
+const { connectToDesigo } = require('../controllers/desigoConnectionController');
 const router = express.Router();
 
 // Define the POST route for connecting to Desigo CC
