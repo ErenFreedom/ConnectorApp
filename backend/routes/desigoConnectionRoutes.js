@@ -1,8 +1,16 @@
 const express = require('express');
-const { connectToDesigo } = require('../controllers/desigoConnectionController');
+const { check } = require('express-validator');
+const { connectToDesigo } = require('../controllers/connectToDesigoController');
 const router = express.Router();
 
-// Route to connect to Desigo CC and fetch token
-router.post('/desigo-connect', connectToDesigo);
+// Define the POST route for connecting to Desigo CC
+router.post(
+    '/connect-desigo',  // Endpoint for Desigo CC connection
+    [
+        check('username', 'Username is required').not().isEmpty(),
+        check('password', 'Password is required').not().isEmpty(),
+    ],
+    connectToDesigo
+);
 
 module.exports = router;
