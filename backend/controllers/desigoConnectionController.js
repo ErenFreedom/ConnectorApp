@@ -1,38 +1,39 @@
 const axios = require('axios');
-require('dotenv').config();
+const { validationResult } = require('express-validator');
 
-// Controller function to connect to Desigo CC and fetch token
+// Controller to connect to Desigo CC
 exports.connectToDesigo = async (req, res) => {
-    const { username, password } = req.body;  // Expect username and password from frontend
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Desigo CC credentials provided in the request
+    const { username, password } = req.body;
 
     try {
-        // Make a POST request to Desigo CC token endpoint
-        const response = await axios.post(
-            'https://192.168.22.160/WebServiceApplication/api/token',  // Replace with actual API endpoint
-            `grant_type=password&username=${username}&password=${password}`,  // Data for the API call
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json',
-                    // Bypass SSL certificate validation (if required)
-                    rejectUnauthorized: false
-                }
+        // Make POST request to Desigo CC API to get a token
+        const response = await axios.post('https://bmspc135/WSI_SERVICES/api/token', {
+            grant_type: 'password',
+            username: username || 'defaultadmin',
+            password: password || 'desigo'  // You can set default values or fetch from .env
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
             }
-        );
+        });
 
-        // Extract the token from the response
-        const token = response.data.access_token;
-
-        // Send the token back to the frontend
+        // If successful, the token will be returned
+        const token = response.data.access_token; // Assuming access token is returned in this field
         res.status(200).json({
-            message: 'Successfully connected to Desigo CC and fetched token.',
+            message: 'Connected to Desigo CC successfully.',
             token: token
         });
 
     } catch (error) {
-        console.error('Error connecting to Desigo CC:', error.message);
+        console.error('Error connecting to Desigo CC:', error.response ? error.response.data : error.message);
         res.status(500).json({
-            message: 'Failed to connect to Desigo CC or retrieve token.',
+            message: 'Error connecting to Desigo CC. Please check the URL or credentials.',
             error: error.message
         });
     }
